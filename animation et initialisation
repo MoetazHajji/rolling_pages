@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <SDL/SDL.h>
+#include "animat.h"
+SDL_Surface *ecran, *imageDeFond, *entite1, *entite2;
+
+void init(void)
+{
+	SDL_Init(SDL_INIT_VIDEO);
+	ecran = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE);
+	bg = SDL_LoadBMP("bg");
+	entite1 = SDL_LoadBMP("spritem");
+	entite2 = SDL_LoadBMP("beetle"); // La 2eme image animée.
+	
+	SDL_Rect positionFond;
+	positionFond.x = 0;
+	positionFond.y = 0;
+}
+
+void input_handle(void)
+{
+	SDL_Event event;
+
+	while (SDL_PollEvent(&event)) {
+
+		switch (event.type) {
+		case SDL_QUIT:
+			SDL_Quit();
+			exit(0);
+			break;
+		}
+	}
+}
+
+void anime(void)
+{
+	SDL_Rect positionFond, positionentite1, positionentite2;
+	int avanceX = 1, avanceY = 1;
+	int avanceXI = 0, avanceYI = 1;
+
+	positionFond.x = 0;
+	positionFond.y = 0;
+
+	positionentite1.x = 0;
+	positionentite1.y = 0;
+
+	positionentite2.x = ecran->w - entite2->w; // La nouvelle image sera initialement en haut à droite
+	positionentite2.y = 0;
+
+	while (1) {
+		SDL_BlitSurface(bg, NULL, ecran, &bg);
+
+		SDL_BlitSurface(entite1, NULL, ecran, &positionentite1);
+		
+		SDL_BlitSurface(entite2, NULL, ecran, &positionentite2);
+			
+		if (avanceX) {
+			positionentite1.x++;
+		} else {
+			positionentite1.x--;
+		}
+
+		if (avanceY) {
+			positionentite1.y++;
+		} else {
+			positionentite1.y--;
+		}
+
+		if (positionentite1.x == ecran->w - entite1->w - 1)
+			avanceX = 0;
+		else if (positionentite1.x == 0)
+			avanceX = 1;
+
+		if (positionentite1.y == ecran->h - entite1->h - 1)
+			avanceY = 0;
+		else if (positionentite1.y == 0)
+			avanceY = 1;	
+
+                /* Les calculs qui suivent sont analogues aux précédents */ 
+		if (avanceXI) {
+			positionentite2.x++;
+		} else {
+			positionentite2.x--;
+		}
+		if (avanceYI) {
+			positionentite2.y++;
+		} else {
+			positionentite2.y--;
+		}
+
+		if (positionentite2.x == ecran->w - entite2->w - 1)
+			avanceXI = 0;
+		else if (positionentite2.x == 0)
+			avanceXI = 1;
+
+		if (positionentite2.y == ecran->h - entite2->h - 1)
+			avanceYI = 0;
+		else if (positionentite2.y == 0)
+			avanceYI = 1;
+
+		SDL_Flip(ecran);
+		input_handle();
+		//SDL_Delay(10);
+	}
+}
