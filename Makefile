@@ -1,6 +1,2 @@
-prog:*.h *.c
-	gcc *.h *.c -lSDL -lSDL_ttf -lSDL_image -lSDL_mixer -lm  -o prog -g 
-jeu.o:anim.c
-	gcc -c anim.c -g
-
-
+prog:main-3.o  entite.o
+     gcc:main-3.c entite.c -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf -o prog  
