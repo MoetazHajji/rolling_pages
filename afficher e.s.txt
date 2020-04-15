@@ -1,0 +1,8 @@
+SDL_Surface *image;
+image=IMG_Load("nom.png");
+SDL_Rect imagePosition;
+imagePosition.x=250;
+imagePosition.y=250;
+SDL_BlitSurface(image,NULL,fenetre,&imagePosition);
+SDL_FreeSurface(image);
+SDL_Flip(fenetre);
